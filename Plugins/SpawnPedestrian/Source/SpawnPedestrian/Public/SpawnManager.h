@@ -13,6 +13,5 @@ public:
 private:
 
    UWorld* World = GEditor->GetEditorWorldContext().World();
-
    FLightingBuildOptions LightOptions;
 };

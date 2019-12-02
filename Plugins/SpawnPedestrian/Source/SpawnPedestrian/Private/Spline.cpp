@@ -16,8 +16,3 @@ void ASpline::BeginPlay()
 {
    Super::BeginPlay();
 }
-
-void ASpline::Tick(float DeltaTime)
-{
-   Super::Tick(DeltaTime);
-}

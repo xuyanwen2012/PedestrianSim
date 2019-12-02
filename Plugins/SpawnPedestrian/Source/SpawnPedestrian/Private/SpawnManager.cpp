@@ -11,6 +11,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "SpawnManagerActor.h"
 
 #define DEBUG_PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
 
@@ -70,12 +71,9 @@ void SpawnManager::InitializeNavMesh() const
 
    BoundsVolume->RebuildNavigationData();
 
-
-   FVector Point = UKismetMathLibrary::RandomPointInBoundingBox(FVector::ZeroVector, 100 * Scale);
-
-   DEBUG_PRINT(Point.ToString());
-
    // Generate Debugging cube
-
-   //World->SpawnActor<APedestrianActor>(Point, FRotator::ZeroRotator);
+   //
+   // FVector Point = UKismetMathLibrary::RandomPointInBoundingBox(FVector::ZeroVector, 100 * Scale);
+   const auto Manager = World->SpawnActor<ASpawnManagerActor>();
+   Manager->InitializeDebugScene();
 }

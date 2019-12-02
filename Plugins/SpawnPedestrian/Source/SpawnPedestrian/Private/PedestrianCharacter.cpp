@@ -3,6 +3,12 @@
 
 #include "PedestrianCharacter.h"
 #include "Spline.h"
+#include "SplineAIController.h"
+
+APedestrianCharacter::APedestrianCharacter()
+{
+   AIControllerClass = ASplineAIController::StaticClass();
+}
 
 void APedestrianCharacter::Tick(const float DeltaTime)
 {

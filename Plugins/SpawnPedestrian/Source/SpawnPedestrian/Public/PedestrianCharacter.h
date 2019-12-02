@@ -15,5 +15,7 @@ class SPAWNPEDESTRIAN_API APedestrianCharacter : public ASplineCharacter
    GENERATED_BODY()
 
 public:
+   APedestrianCharacter();
+
    void Tick(float DeltaTime) override;
 };

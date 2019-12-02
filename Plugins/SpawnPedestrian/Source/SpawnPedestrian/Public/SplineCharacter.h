@@ -24,6 +24,12 @@ public:
    UPROPERTY(EditAnywhere)
    ASpline* SplineRef;
 
+   UPROPERTY()
+   float DistanceAloneSpline;
+
+   UPROPERTY()
+   float AxisValue;
+
    UFUNCTION()
    void AddMovement();
 
@@ -34,20 +40,13 @@ protected:
    void BeginPlay() override;
 
    UPROPERTY()
-      float DistanceAloneSpline;
+   float PlayerAcceleration;
 
    UPROPERTY()
-      float PlayerAcceleration;
-
-   UPROPERTY()
-      float CharacterSpeed;
-
-   UPROPERTY()
-      float AxisValue;
+   float CharacterSpeed;
 
 public:
    void Tick(float DeltaTime) override;
 
    void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 };
