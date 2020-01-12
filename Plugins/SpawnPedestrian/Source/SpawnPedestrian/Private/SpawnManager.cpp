@@ -4,14 +4,18 @@
 #include "Engine/SkyLight.h"
 #include "Components/SkyLightComponent.h"
 
+
 #include "EngineUtils.h"
 #include "Engine/StaticMeshActor.h"
 #include "NavMeshBoundsVolume.h"
 #include "Builders/CubeBuilder.h"
+#include "EditorModeManager.h"
+
 
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "SpawnManagerActor.h"
+#include "NavigationSystem.h"
+#include "MyVolume.h"
 
 #define DEBUG_PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
 
@@ -49,31 +53,53 @@ SpawnManager::SpawnManager()
 
 void SpawnManager::InitializeNavMesh() const
 {
-   UE_LOG(LogTemp, Warning, TEXT("void SpawnManager::InitializeNavMesh() Called."));
+   ULevel* CurrentLevel = World->GetCurrentLevel();
 
-   const FActorSpawnParameters SpawnParameters;
+   World->SpawnActor<AMyVolume>();
 
-   const auto BoundsVolume = World->SpawnActorDeferred<ANavMeshBoundsVolume>(
-      ANavMeshBoundsVolume::StaticClass(), FTransform());
+
+   const FTransform ObjectTransform{
+      FRotator(),
+      FVector(),
+      FVector(10.0f, 10.0f, 10.0f)
+   };
+
+   auto NewActorCreated = Cast<ANavMeshBoundsVolume>(
+      GEditor->AddActor(CurrentLevel,
+                        ANavMeshBoundsVolume::StaticClass(),
+                        ObjectTransform, true,
+                        RF_Public | RF_Standalone | RF_Transactional));
+
+   NewActorCreated->SetActorLabel(TEXT("NavMesh"));
+   NewActorCreated->SetActorRelativeLocation(FVector());
+   NewActorCreated->SetActorRelativeScale3D(ObjectTransform.GetScale3D());
+
+
+   UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
+   NavSys->OnNavigationBoundsUpdated(NewActorCreated);
+
+
 
    UCubeBuilder* CubeBuilder = Cast<UCubeBuilder>(GEditor->FindBrushBuilder(UCubeBuilder::StaticClass()));
-   CubeBuilder->X = 200;
-   CubeBuilder->Y = 200;
+   CubeBuilder->X = 1000;
+   CubeBuilder->Y = 1000;
    CubeBuilder->Z = 200;
-   CubeBuilder->Build(World, BoundsVolume);
 
-   const FVector Scale = FVector(10.0f, 10.0f, 10.0f);
 
-   BoundsVolume->SetActorScale3D(Scale);
-   BoundsVolume->BrushBuilder = CubeBuilder;
+   //ABrush* Brush = nullptr;
+   bool bResult = CubeBuilder->Build(World);
 
-   UGameplayStatics::FinishSpawningActor(BoundsVolume, FTransform());
+   NewActorCreated->BrushBuilder = CubeBuilder;
 
-   BoundsVolume->RebuildNavigationData();
+   //NewActorCreated->Brush->BuildBound();
 
-   // Generate Debugging cube
-   //
-   // FVector Point = UKismetMathLibrary::RandomPointInBoundingBox(FVector::ZeroVector, 100 * Scale);
-   const auto Manager = World->SpawnActor<ASpawnManagerActor>();
-   Manager->InitializeDebugScene();
+   //auto C = NewActorCreated->GetBrushComponent();
+   //auto A = NewActorCreated->GetBounds();
+
+   // Refresh editor
+   //GEditor->EditorUpdateComponents();
+   World->UpdateWorldComponents(true, false);
+   NewActorCreated->RerunConstructionScripts();
+   GLevelEditorModeTools().MapChangeNotify();
+
 }

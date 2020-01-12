@@ -5,6 +5,7 @@
 #include "Spline.h"
 
 ASplineCharacter::ASplineCharacter()
+   : Super()
 {
    PrimaryActorTick.bCanEverTick = true;
    DistanceAloneSpline = 0;

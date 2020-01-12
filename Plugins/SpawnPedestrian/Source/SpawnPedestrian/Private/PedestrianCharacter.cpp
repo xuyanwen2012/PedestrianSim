@@ -6,6 +6,7 @@
 #include "SplineAIController.h"
 
 APedestrianCharacter::APedestrianCharacter()
+   : Super()
 {
    AIControllerClass = ASplineAIController::StaticClass();
 }

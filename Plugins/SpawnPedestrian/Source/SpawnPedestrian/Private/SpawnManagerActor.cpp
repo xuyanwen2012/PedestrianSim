@@ -110,6 +110,4 @@ void ASpawnManagerActor::InitializeDebugScene()
    {
       Spline->SplineComponent->AddSplineLocalPoint(FVector{i * 100.0f, i * 100.0f, 0});
    }
-
-   SplineRef.Add(Spline);
 }
