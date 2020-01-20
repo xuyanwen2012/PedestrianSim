@@ -19,6 +19,8 @@
 #include "NavigationSystem.h"
 #include "MyTestVolume.h"
 
+#include "BSPOps.h"
+
 #define DEBUG_PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
 
 SpawnManager::SpawnManager()
@@ -57,12 +59,6 @@ void SpawnManager::InitializeNavMesh() const
 {
    ULevel* CurrentLevel = World->GetCurrentLevel();
 
-   ANavMeshBoundsVolume* NavMesh = World->SpawnActor<ANavMeshBoundsVolume>();
-   UBrushComponent* Brush = NavMesh->GetBrushComponent();
-   Brush->Bounds = FBox();
-   UNavigationSystemV1* NavSystem = Cast<UNavigationSystemV1>(World->GetNavigationSystem());
-   NavSystem->OnNavigationBoundsUpdated(NavMesh);
-
    // Cube Additive Brush
    UCubeBuilder* CubeAdditiveBrushBuilder = Cast<UCubeBuilder>(GEditor->FindBrushBuilder(UCubeBuilder::StaticClass()));
    CubeAdditiveBrushBuilder->X = 4096.0f;
@@ -71,63 +67,49 @@ void SpawnManager::InitializeNavMesh() const
    CubeAdditiveBrushBuilder->Build(World);
 
    GEditor->Exec(World, TEXT("BRUSH MOVETO X=0 Y=0 Z=0"));
+   //GEditor->Exec(World, TEXT("BRUSH ADDVOLUME CLASS=ANavMeshBoundsVolume"));
    GEditor->Exec(World, TEXT("BRUSH ADD"));
+
+   // -------------
+
+   const FVector SpawnLoc = FVector::ZeroVector;
+   AVolume* Actor = World->SpawnActor<AVolume>(ANavMeshBoundsVolume::StaticClass(), SpawnLoc, FRotator::ZeroRotator);
+   if (Actor)
+   {
+      Actor->PreEditChange(nullptr);
+
+      ABrush* Brush = World->GetDefaultBrush();
+
+      FBSPOps::csgCopyBrush(
+         Actor,
+         Brush,
+         0,
+         RF_Transactional,
+         true,
+         true
+      );
+
+      if (Actor->Brush)
+      {
+         for (int32 poly = 0; poly < Actor->Brush->Polys->Element.Num(); ++poly)
+         {
+            FPoly* Poly = &(Actor->Brush->Polys->Element[poly]);
+            Poly->Material = nullptr;
+         }
+      }
+
+      Actor->PostEditChange();
+   }
+
+   GEditor->RedrawLevelEditingViewports();
+   if (Actor)
+   {
+      ULevel::LevelDirtiedEvent.Broadcast();
+      World->BroadcastLevelsChanged();
+   }
+
+   // -------------
+
+
    GLevelEditorModeTools().MapChangeNotify();
-
-   // New attempts
-   //const FActorSpawnParameters SpawnParameters;
-   //ANavMeshBoundsVolume* NavMeshBoundsVolume = World->SpawnActor<ANavMeshBoundsVolume>(SpawnParameters);
-   //UNavigationSystemV1* NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
-   //NavSystem->OnNavigationBoundsUpdated(NavMeshBoundsVolume);
-   //NavMeshBoundsVolume->SetActorScale3D(FVector(100.0f, 100.0f, 100.0f));
-   //NavMeshBoundsVolume->SetActorLocation(FVector::ZeroVector);
-
-   //World->GetNavigationSystem()
-
-
-
-   //const FTransform ObjectTransform{
-   //   FRotator(),
-   //   FVector(),
-   //   FVector(10.0f, 10.0f, 10.0f)
-   //};
-
-   //auto NewActorCreated = Cast<ANavMeshBoundsVolume>(
-   //   GEditor->AddActor(CurrentLevel,
-   //                     ANavMeshBoundsVolume::StaticClass(),
-   //                     ObjectTransform, true,
-   //                     RF_Public | RF_Standalone | RF_Transactional));
-
-   //NewActorCreated->SetActorLabel(TEXT("NavMesh"));
-   //NewActorCreated->SetActorRelativeLocation(FVector());
-   //NewActorCreated->SetActorRelativeScale3D(ObjectTransform.GetScale3D());
-
-
-   //UNavigationSystemV1* NavSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(World);
-   //NavSys->OnNavigationBoundsUpdated(NewActorCreated);
-
-
-
-   //UCubeBuilder* CubeBuilder = Cast<UCubeBuilder>(GEditor->FindBrushBuilder(UCubeBuilder::StaticClass()));
-   //CubeBuilder->X = 1000;
-   //CubeBuilder->Y = 1000;
-   //CubeBuilder->Z = 200;
-
-
-   ////ABrush* Brush = nullptr;
-   //bool bResult = CubeBuilder->Build(World);
-
-   //NewActorCreated->BrushBuilder = CubeBuilder;
-
-   ////NewActorCreated->Brush->BuildBound();
-
-   ////auto C = NewActorCreated->GetBrushComponent();
-   ////auto A = NewActorCreated->GetBounds();
-
-   //// Refresh editor
-   ////GEditor->EditorUpdateComponents();
-   //World->UpdateWorldComponents(true, false);
-   //NewActorCreated->RerunConstructionScripts();
-   //GLevelEditorModeTools().MapChangeNotify();
-
 }

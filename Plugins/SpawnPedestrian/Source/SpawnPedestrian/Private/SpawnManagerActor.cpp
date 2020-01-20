@@ -3,7 +3,6 @@
 
 #include "SpawnManagerActor.h"
 #include "Kismet/GameplayStatics.h"
-#include "PedestrianCharacter.h"
 
 ASpawnManagerActor::ASpawnManagerActor()
 {
@@ -47,13 +46,13 @@ void ASpawnManagerActor::SpawnNextSplineCharacter()
 
          //GetWorld()->SpawnActor(, FTransform(NewRotation, NewLocation));
          // APedestrianCharacter::StaticClass()
-         auto Pedestrian = GetWorld()->SpawnActor<APedestrianCharacter>(NewLocation, NewRotation);
+         //auto Pedestrian = GetWorld()->SpawnActor<APedestrianCharacter>(NewLocation, NewRotation);
 
          // Initialize the spawned actor
          // 
-         Pedestrian->SplineRef = CurrentSpline;
-         Pedestrian->DistanceAloneSpline = CurrentDistance;
-         Pedestrian->SpawnDefaultController();
+         //Pedestrian->SplineRef = CurrentSpline;
+         //Pedestrian->DistanceAloneSpline = CurrentDistance;
+         //Pedestrian->SpawnDefaultController();
 
          // Update distance alone the spline
          //
