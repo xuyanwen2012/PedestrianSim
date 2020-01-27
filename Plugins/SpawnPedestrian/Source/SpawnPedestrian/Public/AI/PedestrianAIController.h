@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+
+#include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
 #include "PedestrianAIController.generated.h"
 
 /**
@@ -13,4 +17,20 @@ UCLASS()
 class SPAWNPEDESTRIAN_API APedestrianAIController : public AAIController
 {
    GENERATED_BODY()
+
+protected:
+
+   UPROPERTY(Transient)
+   UBehaviorTreeComponent* BehaviorComp;
+
+   UPROPERTY(Transient)
+   UBlackboardComponent* BlackboardComp;
+
+public:
+
+   APedestrianAIController();
+
+   void OnPossess(APawn* InPawn) override;
+
+   uint8 TargetKeyId;
 };
