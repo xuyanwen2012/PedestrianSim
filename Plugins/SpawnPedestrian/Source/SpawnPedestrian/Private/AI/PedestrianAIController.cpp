@@ -26,7 +26,7 @@ void APedestrianAIController::OnPossess(APawn* InPawn)
 
       BlackboardComp->InitializeBlackboard(*Pedestrian->BehaviorTree->BlackboardAsset);
 
-      TargetKeyId = BlackboardComp->GetKeyID("Target");
+      TargetKeyId = BlackboardComp->GetKeyID("TargetLocation");
 
       BehaviorComp->StartTree(*Pedestrian->BehaviorTree);
    }
