@@ -15,7 +15,7 @@
 
 #define DEBUG_PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
 
-SpawnManager::SpawnManager()
+FSpawnManager::FSpawnManager()
 {
    UE_LOG(LogTemp, Warning, TEXT("SpawnManager::SpawnManager() Called."));
 
@@ -47,7 +47,7 @@ SpawnManager::SpawnManager()
    }
 }
 
-void SpawnManager::InitializeNavMesh() const
+void FSpawnManager::InitializeNavMesh() const
 {
    ULevel* CurrentLevel = World->GetCurrentLevel();
 

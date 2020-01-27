@@ -3,10 +3,10 @@
 #include "Editor.h"
 #include "LightingBuildOptions.h"
 
-class SpawnManager
+class FSpawnManager
 {
 public:
-   SpawnManager();
+   FSpawnManager();
 
    void InitializeNavMesh() const;
 

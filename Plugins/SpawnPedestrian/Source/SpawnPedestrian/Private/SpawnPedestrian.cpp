@@ -61,8 +61,8 @@ void FSpawnPedestrianModule::ShutdownModule()
 
 void FSpawnPedestrianModule::PluginButtonClicked()
 {
-   SpawnManager manager{};
-   manager.InitializeNavMesh();
+   const FSpawnManager Manager;
+   Manager.InitializeNavMesh();
 }
 
 void FSpawnPedestrianModule::AddMenuExtension(FMenuBuilder& Builder)
