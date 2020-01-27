@@ -4,22 +4,14 @@
 #include "Engine/SkyLight.h"
 #include "Components/SkyLightComponent.h"
 
-#include "Components/BrushComponent.h"
-
-
 #include "EngineUtils.h"
 #include "Engine/StaticMeshActor.h"
-#include "NavMeshBoundsVolume.h"
 #include "Builders/CubeBuilder.h"
 #include "EditorModeManager.h"
-
 
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "NavigationSystem.h"
-#include "MyTestVolume.h"
-
-#include "BSPOps.h"
 
 #define DEBUG_PRINT(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
 
@@ -67,49 +59,7 @@ void SpawnManager::InitializeNavMesh() const
    CubeAdditiveBrushBuilder->Build(World);
 
    GEditor->Exec(World, TEXT("BRUSH MOVETO X=0 Y=0 Z=0"));
-   //GEditor->Exec(World, TEXT("BRUSH ADDVOLUME CLASS=ANavMeshBoundsVolume"));
-   GEditor->Exec(World, TEXT("BRUSH ADD"));
-
-   // -------------
-
-   const FVector SpawnLoc = FVector::ZeroVector;
-   AVolume* Actor = World->SpawnActor<AVolume>(ANavMeshBoundsVolume::StaticClass(), SpawnLoc, FRotator::ZeroRotator);
-   if (Actor)
-   {
-      Actor->PreEditChange(nullptr);
-
-      ABrush* Brush = World->GetDefaultBrush();
-
-      FBSPOps::csgCopyBrush(
-         Actor,
-         Brush,
-         0,
-         RF_Transactional,
-         true,
-         true
-      );
-
-      if (Actor->Brush)
-      {
-         for (int32 poly = 0; poly < Actor->Brush->Polys->Element.Num(); ++poly)
-         {
-            FPoly* Poly = &(Actor->Brush->Polys->Element[poly]);
-            Poly->Material = nullptr;
-         }
-      }
-
-      Actor->PostEditChange();
-   }
-
-   GEditor->RedrawLevelEditingViewports();
-   if (Actor)
-   {
-      ULevel::LevelDirtiedEvent.Broadcast();
-      World->BroadcastLevelsChanged();
-   }
-
-   // -------------
-
+   GEditor->Exec(World, TEXT("BRUSH ADDVOLUME CLASS=NavMeshBoundsVolume"));
 
    GLevelEditorModeTools().MapChangeNotify();
 }
