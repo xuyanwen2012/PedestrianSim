@@ -62,7 +62,10 @@ void FSpawnPedestrianModule::ShutdownModule()
 void FSpawnPedestrianModule::PluginButtonClicked()
 {
    const FSpawnManager Manager;
+
+   Manager.InitializeMap();
    Manager.InitializeNavMesh();
+   Manager.InitializePedestrian();
 }
 
 void FSpawnPedestrianModule::AddMenuExtension(FMenuBuilder& Builder)
