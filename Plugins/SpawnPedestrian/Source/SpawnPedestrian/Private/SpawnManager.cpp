@@ -35,6 +35,8 @@ FSpawnManager::FSpawnManager()
 
 void FSpawnManager::InitializeMap() const
 {
+   UWorld* World = GEditor->GetEditorWorldContext().World();
+
    const FVector Location = FVector(0.0f, 0.0f, 2000.0f);
    const FVector LightLocation = FVector(0.0f, 0.0f, 100000.0f);
 
@@ -61,19 +63,7 @@ void FSpawnManager::InitializeMap() const
 
 void FSpawnManager::InitializeNavMesh() const
 {
-   // Cube Additive Brush
-   UCubeBuilder* CubeAdditiveBrushBuilder = Cast<UCubeBuilder>(
-      GEditor->FindBrushBuilder(UCubeBuilder::StaticClass()));
-
-   CubeAdditiveBrushBuilder->X = NavMeshExtend.X;
-   CubeAdditiveBrushBuilder->Y = NavMeshExtend.Y;
-   CubeAdditiveBrushBuilder->Z = NavMeshExtend.Z;
-   CubeAdditiveBrushBuilder->Build(World);
-
-   GEditor->Exec(World, TEXT("BRUSH MOVETO X=0 Y=0 Z=0"));
-   GEditor->Exec(World, TEXT("BRUSH ADDVOLUME CLASS=NavMeshBoundsVolume"));
-
-   GLevelEditorModeTools().MapChangeNotify();
+   DummySpawnBoxedVolume(NavMeshOrigin, NavMeshExtend, TEXT("NavMeshBoundsVolume"));
 }
 
 void FSpawnManager::InitializePedestrian() const
@@ -91,4 +81,31 @@ FString FSpawnManager::InContent(const FString& RelativePath)
    static FString ContentDir = IPluginManager::Get().FindPlugin(TEXT("SpawnPedestrian"))->GetContentDir();
 
    return ContentDir / RelativePath;
+}
+
+void FSpawnManager::DummySpawnBoxedVolume(FVector Origin, FVector BoxExtend, TCHAR* VolumeClassName)
+{
+   UWorld* World = GEditor->GetEditorWorldContext().World();
+   ABrush* WorldBrush = World->GetDefaultBrush();
+
+   // Cube Additive Brush
+   UCubeBuilder* CubeAdditiveBrushBuilder = Cast<UCubeBuilder>(
+      GEditor->FindBrushBuilder(UCubeBuilder::StaticClass()));
+
+   CubeAdditiveBrushBuilder->X = BoxExtend.X;
+   CubeAdditiveBrushBuilder->Y = BoxExtend.Y;
+   CubeAdditiveBrushBuilder->Z = BoxExtend.Z;
+   CubeAdditiveBrushBuilder->Build(World);
+
+   //GEditor->Exec(World, TEXT("BRUSH MOVETO X=0 Y=0 Z=0"));
+   WorldBrush->Modify();
+   WorldBrush->SetActorLocation(Origin, false);
+
+   // GEditor->Exec(World, TEXT("BRUSH ADDVOLUME CLASS=NavMeshVolume"));
+   TArray<FStringFormatArg> Args;
+   Args.Add(FStringFormatArg(VolumeClassName));
+   const auto Cmd = FString::Format(TEXT("BRUSH ADDVOLUME CLASS={0}"), Args);
+   GEditor->Exec(World, ToCStr(Cmd));
+
+   GLevelEditorModeTools().MapChangeNotify();
 }

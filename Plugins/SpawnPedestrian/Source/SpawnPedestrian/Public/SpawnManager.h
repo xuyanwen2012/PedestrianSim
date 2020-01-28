@@ -15,6 +15,8 @@ public:
 
    static FString InContent(const FString& RelativePath);
 
+   static void DummySpawnBoxedVolume(FVector Origin, FVector BoxExtend, TCHAR* VolumeClassName);
+
 protected:
 
    TSubclassOf<APedestrianCharacter> PedestrianCharacterBP;
@@ -27,6 +29,5 @@ protected:
 
 private:
 
-   UWorld* World = GEditor->GetEditorWorldContext().World();
    FLightingBuildOptions LightOptions;
 };
