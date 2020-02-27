@@ -12,18 +12,18 @@ class FSpawnPedestrianModule : public IModuleInterface
 {
 public:
 
-   /** IModuleInterface implementation */
-   void StartupModule() override;
-   void ShutdownModule() override;
+	/** IModuleInterface implementation */
+	void StartupModule() override;
+	void ShutdownModule() override;
 
-   /** This function will be bound to Command. */
-   void PluginButtonClicked();
-
-private:
-
-   void AddToolbarExtension(FToolBarBuilder& Builder);
-   void AddMenuExtension(FMenuBuilder& Builder);
+	/** This function will be bound to Command. */
+	void PluginButtonClicked();
 
 private:
-   TSharedPtr<class FUICommandList> PluginCommands;
+
+	void AddToolbarExtension(FToolBarBuilder& Builder);
+	void AddMenuExtension(FMenuBuilder& Builder);
+
+private:
+	TSharedPtr<class FUICommandList> PluginCommands;
 };

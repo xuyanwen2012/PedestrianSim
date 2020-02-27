@@ -14,19 +14,19 @@
 UCLASS()
 class SPAWNPEDESTRIAN_API UBTTask_MoveToLocation : public UBTTask_BlackboardBase
 {
-   GENERATED_BODY()
+	GENERATED_BODY()
 
 public:
-   EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };
 
 inline EBTNodeResult::Type UBTTask_MoveToLocation::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-   APedestrianAIController* AI = Cast<APedestrianAIController>(OwnerComp.GetAIOwner());
+	APedestrianAIController* AI = Cast<APedestrianAIController>(OwnerComp.GetAIOwner());
 
-   FVector TargetLocation = OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Vector>(AI->TargetKeyId);
+	FVector TargetLocation = OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Vector>(AI->TargetKeyId);
 
-   AI->MoveToLocation(TargetLocation, 5.0f, true, true, true, true, nullptr, true);
+	AI->MoveToLocation(TargetLocation, 5.0f, true, true, true, true, nullptr, true);
 
-   return EBTNodeResult::Succeeded;
+	return EBTNodeResult::Succeeded;
 }

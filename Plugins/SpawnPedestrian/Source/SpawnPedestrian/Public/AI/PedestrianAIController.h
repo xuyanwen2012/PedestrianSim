@@ -16,21 +16,21 @@
 UCLASS()
 class SPAWNPEDESTRIAN_API APedestrianAIController : public AAIController
 {
-   GENERATED_BODY()
+	GENERATED_BODY()
 
 protected:
 
-   UPROPERTY(Transient)
-   UBehaviorTreeComponent* BehaviorComp;
+	UPROPERTY(Transient)
+	UBehaviorTreeComponent* BehaviorComp;
 
-   UPROPERTY(Transient)
-   UBlackboardComponent* BlackboardComp;
+	UPROPERTY(Transient)
+	UBlackboardComponent* BlackboardComp;
 
 public:
 
-   APedestrianAIController();
+	APedestrianAIController();
 
-   void OnPossess(APawn* InPawn) override;
+	void OnPossess(APawn* InPawn) override;
 
-   uint8 TargetKeyId;
+	uint8 TargetKeyId;
 };

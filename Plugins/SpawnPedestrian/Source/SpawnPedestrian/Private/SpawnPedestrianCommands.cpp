@@ -6,8 +6,8 @@
 
 void FSpawnPedestrianCommands::RegisterCommands()
 {
-   UI_COMMAND(PluginAction, "SpawnPedestrian", "Execute SpawnPedestrian action", EUserInterfaceActionType::Button,
-              FInputGesture());
+	UI_COMMAND(PluginAction, "SpawnPedestrian", "Execute SpawnPedestrian action", EUserInterfaceActionType::Button,
+	           FInputGesture());
 }
 
 #undef LOCTEXT_NAMESPACE

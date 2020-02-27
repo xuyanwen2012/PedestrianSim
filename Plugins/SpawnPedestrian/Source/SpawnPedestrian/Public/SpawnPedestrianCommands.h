@@ -10,16 +10,16 @@ class FSpawnPedestrianCommands : public TCommands<FSpawnPedestrianCommands>
 {
 public:
 
-   FSpawnPedestrianCommands()
-      : TCommands<FSpawnPedestrianCommands>(
-         TEXT("SpawnPedestrian"), NSLOCTEXT("Contexts", "SpawnPedestrian", "SpawnPedestrian Plugin"), NAME_None,
-         FSpawnPedestrianStyle::GetStyleSetName())
-   {
-   }
+	FSpawnPedestrianCommands()
+		: TCommands<FSpawnPedestrianCommands>(
+			TEXT("SpawnPedestrian"), NSLOCTEXT("Contexts", "SpawnPedestrian", "SpawnPedestrian Plugin"), NAME_None,
+			FSpawnPedestrianStyle::GetStyleSetName())
+	{
+	}
 
-   // TCommands<> interface
-   void RegisterCommands() override;
+	// TCommands<> interface
+	void RegisterCommands() override;
 
 public:
-   TSharedPtr<FUICommandInfo> PluginAction;
+	TSharedPtr<FUICommandInfo> PluginAction;
 };

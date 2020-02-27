@@ -10,33 +10,33 @@
 
 void AMyTriggerVolume::BeginPlay()
 {
-   Super::BeginPlay();
+	Super::BeginPlay();
 
-   DrawDebugBox(GetWorld(), GetActorLocation(), GetActorScale() * 100, FColor::Cyan, true, -1, 0, 5);
+	DrawDebugBox(GetWorld(), GetActorLocation(), GetActorScale() * 100, FColor::Cyan, true, -1, 0, 5);
 }
 
 AMyTriggerVolume::AMyTriggerVolume()
 {
-   //Register Events
-   OnActorBeginOverlap.AddDynamic(this, &AMyTriggerVolume::OnOverlapBegin);
-   OnActorEndOverlap.AddDynamic(this, &AMyTriggerVolume::OnOverlapEnd);
+	//Register Events
+	OnActorBeginOverlap.AddDynamic(this, &AMyTriggerVolume::OnOverlapBegin);
+	OnActorEndOverlap.AddDynamic(this, &AMyTriggerVolume::OnOverlapEnd);
 }
 
 void AMyTriggerVolume::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-   if (OtherActor && (OtherActor != this))
-   {
-      // print to screen using above defined method when actor enters trigger volume
-      PRINT("Overlap Begin");
-      PRINT_FSTRING("Other Actor = %s", *OtherActor->GetName());
-   }
+	if (OtherActor && (OtherActor != this))
+	{
+		// print to screen using above defined method when actor enters trigger volume
+		PRINT("Overlap Begin");
+		PRINT_FSTRING("Other Actor = %s", *OtherActor->GetName());
+	}
 }
 
 void AMyTriggerVolume::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
 {
-   if (OtherActor && (OtherActor != this))
-   {
-      PRINT("Overlap Ended");
-      PRINT_FSTRING("%s has left the Trigger Volume", *OtherActor->GetName());
-   }
+	if (OtherActor && (OtherActor != this))
+	{
+		PRINT("Overlap Ended");
+		PRINT_FSTRING("%s has left the Trigger Volume", *OtherActor->GetName());
+	}
 }

@@ -10,19 +10,19 @@
 UCLASS()
 class SPAWNPEDESTRIAN_API APedestrianCharacter : public ACharacter
 {
-   GENERATED_BODY()
+	GENERATED_BODY()
 
 public:
-   APedestrianCharacter();
+	APedestrianCharacter();
 
-   UPROPERTY(EditDefaultsOnly)
-   UBehaviorTree* BehaviorTree;
+	UPROPERTY(EditDefaultsOnly)
+	UBehaviorTree* BehaviorTree;
 
 protected:
-   void BeginPlay() override;
+	void BeginPlay() override;
 
 public:
-   void Tick(float DeltaTime) override;
+	void Tick(float DeltaTime) override;
 
-   void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

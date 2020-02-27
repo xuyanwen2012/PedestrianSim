@@ -6,20 +6,20 @@
 // Sets default values
 APedestrianCharacter::APedestrianCharacter()
 {
-   PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void APedestrianCharacter::BeginPlay()
 {
-   Super::BeginPlay();
+	Super::BeginPlay();
 }
 
 void APedestrianCharacter::Tick(float DeltaTime)
 {
-   Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime);
 }
 
 void APedestrianCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-   Super::SetupPlayerInputComponent(PlayerInputComponent);
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }

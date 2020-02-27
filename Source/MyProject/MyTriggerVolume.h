@@ -12,17 +12,17 @@
 UCLASS()
 class MYPROJECT_API AMyTriggerVolume : public ATriggerVolume
 {
-   GENERATED_BODY()
+	GENERATED_BODY()
 
 protected:
-   void BeginPlay() override;
+	void BeginPlay() override;
 
 public:
-   AMyTriggerVolume();
+	AMyTriggerVolume();
 
-   UFUNCTION()
-   void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
+	UFUNCTION()
+	void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
 
-   UFUNCTION()
-   void OnOverlapEnd(class AActor* OverlappedActor, class AActor* OtherActor);
+	UFUNCTION()
+	void OnOverlapEnd(class AActor* OverlappedActor, class AActor* OtherActor);
 };

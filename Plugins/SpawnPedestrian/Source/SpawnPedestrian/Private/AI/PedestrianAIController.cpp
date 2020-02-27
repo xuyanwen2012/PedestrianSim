@@ -7,27 +7,27 @@
 
 APedestrianAIController::APedestrianAIController()
 {
-   BehaviorComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComp"));
-   BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
+	BehaviorComp = CreateDefaultSubobject<UBehaviorTreeComponent>(TEXT("BehaviorComp"));
+	BlackboardComp = CreateDefaultSubobject<UBlackboardComponent>(TEXT("BlackboardComponent"));
 }
 
 void APedestrianAIController::OnPossess(APawn* InPawn)
 {
-   Super::OnPossess(InPawn);
+	Super::OnPossess(InPawn);
 
-   GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, "APedestrianAIController::OnPossess");
+	GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green, "APedestrianAIController::OnPossess");
 
-   APedestrianCharacter* Pedestrian = Cast<APedestrianCharacter>(InPawn);
+	APedestrianCharacter* Pedestrian = Cast<APedestrianCharacter>(InPawn);
 
-   if (Pedestrian && Pedestrian->BehaviorTree)
-   {
-      GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green,
-                                       "APedestrianAIController::OnPossess --- AI && AI->BehaviorTree");
+	if (Pedestrian && Pedestrian->BehaviorTree)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Green,
+		                                 "APedestrianAIController::OnPossess --- AI && AI->BehaviorTree");
 
-      BlackboardComp->InitializeBlackboard(*Pedestrian->BehaviorTree->BlackboardAsset);
+		BlackboardComp->InitializeBlackboard(*Pedestrian->BehaviorTree->BlackboardAsset);
 
-      TargetKeyId = BlackboardComp->GetKeyID("TargetLocation");
+		TargetKeyId = BlackboardComp->GetKeyID("TargetLocation");
 
-      BehaviorComp->StartTree(*Pedestrian->BehaviorTree);
-   }
+		BehaviorComp->StartTree(*Pedestrian->BehaviorTree);
+	}
 }

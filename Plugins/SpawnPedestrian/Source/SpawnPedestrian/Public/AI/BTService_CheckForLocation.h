@@ -12,11 +12,11 @@
 UCLASS()
 class SPAWNPEDESTRIAN_API UBTService_CheckForLocation : public UBTService
 {
-   GENERATED_BODY()
+	GENERATED_BODY()
 
 public:
 
-   UBTService_CheckForLocation() { bCreateNodeInstance = true; }
+	UBTService_CheckForLocation() { bCreateNodeInstance = true; }
 
-   void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };
